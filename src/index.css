@@ -8,9 +8,4 @@ body {
   background: linear-gradient(90deg, #32c5d2 0%, #48106a 100%);
 }
 
-.logo {
-  filter: invert(82%) sepia(51%) saturate(509%) hue-rotate(72deg) brightness(96%) contrast(99%);
-  width: 100px;
-}
-
 /* colours indigo-#48106A brown green-#343A1A dark green-#2B9720 ligtht green-#5EF38C light blue-#32C5D2*/
