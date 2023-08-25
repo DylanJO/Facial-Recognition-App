@@ -1,0 +1,7 @@
+.Tilt {
+    display: flex;
+}
+
+.logo {
+    filter: invert(9%) sepia(36%) saturate(6302%) hue-rotate(269deg) brightness(115%) contrast(103%);
+  }
