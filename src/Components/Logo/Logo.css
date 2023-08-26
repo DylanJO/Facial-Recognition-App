@@ -3,6 +3,6 @@
 }
 
 .logo {
-    filter: invert(9%) sepia(36%) saturate(6302%) hue-rotate(269deg) brightness(115%) contrast(103%);
-    width: 200px;
+    filter: invert(9%) sepia(36%) saturate(6302%) hue-rotate(269deg) brightness(115%) contrast(103%) drop-shadow(1px 1px 5px rgba(50, 197, 210, 1));
+    width: 120px;
   }

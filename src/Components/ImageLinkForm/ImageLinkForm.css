@@ -1,0 +1,11 @@
+input {
+    border-width: 0;
+    border-style: none;
+    border-color: #5EF38C;
+}
+
+button {
+    background-color: #5EF38C;
+    border: none;
+    color: #48106A;
+}

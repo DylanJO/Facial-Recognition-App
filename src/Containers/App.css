@@ -1,5 +1,15 @@
 .App {
   text-align: center;
+  min-height: 100vh;
+}
+
+.NavBar {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-content: center;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
 }
