@@ -1,6 +1,9 @@
 .App {
   text-align: center;
   min-height: 100vh;
+  height: fit-content;
+  /* display: flex;
+  flex-direction: column; */
 }
 
 .NavBar {
@@ -12,4 +15,10 @@
 .center {
   display: flex;
   justify-content: center;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
 }

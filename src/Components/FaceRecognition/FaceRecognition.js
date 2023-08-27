@@ -1,10 +1,12 @@
+import './FaceRecognition.css'
 
-const FaceRecognition = ({ imageURL }) => {
+const FaceRecognition = ({ imageURL, box }) => {
     return (
         
         <div className="center ma">
-            <div className="absolute mt2">
-            <img src={imageURL} alt="Detected Image" width='500px' height='auto'></img>
+            <div className="mt2 imageBox">
+                <img id="inputimage" src={imageURL} alt="Detected face" width='500px' height='auto'></img>
+                <div className='bounding-box' style={{top: box.topRow, right: box.rightCol, bottom: box.bottomRow, left: box.leftCol}}></div>
             </div>
         </div>
         
@@ -12,3 +14,5 @@ const FaceRecognition = ({ imageURL }) => {
 }
 
 export default FaceRecognition;
+
+// style={{top: box.topRow, right: box.rightCol, bottom: box.bottomRow, left: box.leftCol}}
