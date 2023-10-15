@@ -1,40 +1,49 @@
 import './SignIn.css'
-import { useState } from 'react';
+import { useState } from 'react'
 
-const SignIn = ({ onRouteChange, setCurrentUser }) => {
+const Register = ({ onRouteChange, setCurrentUser }) => {
 
-    const [ signInDetails, setSignInDetails ] = useState({
-        signInEmail: '',
-        signInPassword: ''
+    const [ registerDetails, setregisterDetails ] = useState({
+        email: '',
+        password: '',
+        name: ''
     })
 
+    const onNameChange = (event) => {
+        setregisterDetails({
+            ...registerDetails,
+            name: event.target.value
+        })
+    }
+
     const onEmailChange = (event) => {
-        setSignInDetails({
-            ...signInDetails,
-            signInEmail: event.target.value
+        setregisterDetails({
+            ...registerDetails,
+            email: event.target.value
         })
     }
 
     const onPasswordChange = (event) => {
-        setSignInDetails({
-            ...signInDetails,
-            signInPassword: event.target.value
+        setregisterDetails({
+            ...registerDetails,
+            password: event.target.value
         })
     }
 
     const onSubmitClick = () => {
-        fetch('http://localhost:3001/signIn', {
+        fetch('http://localhost:3001/register', {
                 method: 'post',
                 headers: {'content-type': 'application/json'},
                 body: JSON.stringify({
-                    email: signInDetails.signInEmail,
-                    password: signInDetails.signInPassword
+                    email: registerDetails.email,
+                    password: registerDetails.password,
+                    name: registerDetails.name
                 })
             })
         .then(response => response.json())
         .then(user => {
-            if (user.id) {
-                setCurrentUser(user)
+            if (user) {
+                setCurrentUser(user);
                 onRouteChange('home');
             }
         })
@@ -45,10 +54,20 @@ const SignIn = ({ onRouteChange, setCurrentUser }) => {
             <main className="pa4 black-80">
                 <div className="measure">
                     <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-                    <legend className="f1 fw6 ph0 mh0 white">Sign In</legend>
+                    <legend className="f1 fw6 ph0 mh0 white">Register</legend>
+                    <div className="mt3">
+                        <label className="db fw6 lh-copy f6 white" htmlFor="email-address">Name</label>
+                        <input 
+                        onChange={(e) => onNameChange(e)}
+                        className="pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100"
+                        type="text"
+                        name="name" 
+                        id="name" />
+                    </div>
                     <div className="mt3">
                         <label className="db fw6 lh-copy f6 white" htmlFor="email-address">Email</label>
-                        <input onChange={(e) => onEmailChange(e)}
+                        <input
+                        onChange={(e) => onEmailChange(e)}
                         className="pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100"
                         type="email"
                         name="email-address"
@@ -56,10 +75,11 @@ const SignIn = ({ onRouteChange, setCurrentUser }) => {
                     </div>
                     <div className="mv3">
                         <label className="db fw6 lh-copy f6 white" htmlFor="password">Password</label>
-                        <input onChange={(e) => onPasswordChange(e)}
+                        <input
+                        onChange={(e) => onPasswordChange(e)}
                         className="b pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100"
                         type="password"
-                        name="password" 
+                        name="password"
                         id="password" />
                     </div>
                     </fieldset>
@@ -68,11 +88,8 @@ const SignIn = ({ onRouteChange, setCurrentUser }) => {
                         onClick={() => onSubmitClick()}
                         className="b ph3 pv2 input-reset ba b--white bg-transparent grow pointer f6 dib white"
                         type="submit"
-                        value="Sign in"
+                        value="Register"
                     />
-                    </div>
-                    <div className="lh-copy mt3">
-                        <p onClick={() => onRouteChange('register')} className="f6 link dim white db pointer">Register</p>
                     </div>
                 </div>
             </main>
@@ -81,4 +98,4 @@ const SignIn = ({ onRouteChange, setCurrentUser }) => {
     )
 }
 
-export default SignIn;
+export default Register;

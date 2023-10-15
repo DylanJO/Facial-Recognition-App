@@ -6,6 +6,7 @@ import Rank from '../Components/Rank/Rank';
 import ParticlesBg from 'particles-bg';
 import FaceRecognition from '../Components/FaceRecognition/FaceRecognition';
 import SignIn from '../Components/SignIn/SignIn';
+import Register from '../Components/SignIn/Register';
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -17,7 +18,24 @@ function App() {
     rightCol: 0.75360423,
     topRow: 0.2245356,
   });
-  const [ signInStatus, setSignInStatus ] = useState('signin');
+  const [ Route, setRoute ] = useState('signin');
+  const [ isSignedIn, setIsSignedIn ] = useState(false);
+  const [ currentUser, setCurrentUser ] = useState({
+    id: '',
+    name: '',
+    email: '',
+    password: '',
+    entries: 0,
+    joined: ''
+  });
+
+
+// homepage connect to server - not needed at the moment
+//  useEffect(() => {
+//   fetch('http://localhost:3001/')
+//       .then(response => response.json())
+//       .then(console.log);
+//  },[]);
 
   const onInputChange = (event) => {
     setInput(event.target.value);
@@ -43,9 +61,11 @@ function App() {
   }
 
   const onRouteChange = (route) => {
-    setSignInStatus(route);
+    route === 'home' ? setIsSignedIn(true) : setIsSignedIn(false)
+    setRoute(route);
   }
 
+  // runs clarifai api to detect face whenever an image is submitted
   useEffect(() => {
     // Your PAT (Personal Access Token) can be found in the portal under Authentification
     const PAT = 'de4ae76a2a6b442389a96e1a219f2957';
@@ -56,10 +76,6 @@ function App() {
     // Change these to whatever model and image URL you want to use
     const MODEL_ID = 'face-detection'; 
     const IMAGE_URL = imageURL;
-
-    ///////////////////////////////////////////////////////////////////////////////////
-    // YOU DO NOT NEED TO CHANGE ANYTHING BELOW THIS LINE TO RUN THIS EXAMPLE
-    ///////////////////////////////////////////////////////////////////////////////////
 
     const raw = JSON.stringify({
         "user_app_id": {
@@ -93,7 +109,27 @@ function App() {
         .then(response => response.text())
         .then(output => JSON.parse(output))
         .then(boundingBox => calculateFaceLocation(boundingBox))
-        .then(data => setBox(data))
+        .then(data => {
+          setBox(data);
+
+          if (data) {
+            fetch('http://localhost:3001/image', {
+                  method: 'put',
+                  headers: {'content-type': 'application/json'},
+                  body: JSON.stringify({
+                  id: currentUser.id
+                })
+              })
+              .then(response => response.json())
+              .then(count => {
+                setCurrentUser({
+                  ...currentUser,
+                  entries: count
+                })
+              })
+          }
+
+        })
         .catch(error => console.log(error))
   },[imageURL]);
 
@@ -103,21 +139,22 @@ function App() {
       <ParticlesBg color="#5EF38C" num={200} type="cobweb" bg={true}/>
       <div className='NavBar'>
         <Logo />
-        { signInStatus === 'signin' ? <></> :<Navigation onRouteChange={onRouteChange}/> }
+       <Navigation onRouteChange={onRouteChange} isSignedIn={isSignedIn}/>
       </div>
-      { signInStatus === 'signin' ? <SignIn onRouteChange={onRouteChange}/>
-      : <div className='content'>
+      { Route === 'home' ?
+        <div className='content'>
 
-      <div className='content-left'>
-        <Rank />
-        <ImageLinkForm onInputChange={onInputChange}  onButtonSubmit={onButtonSubmit}/>
-      </div>
-      <div className='content-right'>
-        <FaceRecognition box={box} imageURL={imageURL}/>
-      </div>
+          <div className='content-left'>
+            <Rank name={currentUser.name} entries={currentUser.entries}/>
+            <ImageLinkForm onInputChange={onInputChange}  onButtonSubmit={onButtonSubmit}/>
+          </div>
+          <div className='content-right'>
+            <FaceRecognition box={box} imageURL={imageURL}/>
+          </div>
 
-    </div>
-    }
+        </div>
+        : (Route === 'signin' ? <SignIn onRouteChange={onRouteChange} setCurrentUser={setCurrentUser}/> : <Register onRouteChange={onRouteChange} setCurrentUser={setCurrentUser}/>)
+      }
 
 
     </div>

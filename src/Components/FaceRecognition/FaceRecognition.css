@@ -9,3 +9,8 @@
 .imageBox {
     position: relative;
 }
+
+#inputimage {
+    max-height: 500px;
+    max-width: 500px;
+}
