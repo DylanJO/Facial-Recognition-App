@@ -15,7 +15,7 @@ The Face Detection Web App is a web application that allows users to submit link
 ## Technologies Used
 
 - **Frontend**: React - built with create-react-app
-- **Backend**: Express.js
+- **Backend**: Express.js https://github.com/DylanJO/Facial-recognition-API - hosted on server.com
 - **Database**: PostgreSQL
 - **Face Detection API**: ClarifAI https://docs.clarifai.com/api-guide/api-overview/
 
