@@ -34,6 +34,7 @@ function App() {
   const [ Route, setRoute ] = useState('signin');
   const [ isSignedIn, setIsSignedIn ] = useState(false);
   const [ currentUser, setCurrentUser ] = useState(initialState.user);
+  const API_URL = process.env.API_URL;
 
 
 // homepage connect to server - not needed at the moment
@@ -87,7 +88,7 @@ function App() {
     // strictMode work around
     if (effectRan.current === true) {
 
-      fetch('http://localhost:3001/imageurl', {
+      fetch(`${API_URL}/imageurl`, {
         method: 'post',
         headers: {'content-type': 'application/json'},
         body: JSON.stringify({
@@ -100,7 +101,7 @@ function App() {
         setBox(data);
 
         if (data) {
-          fetch('http://localhost:3001/image', {
+          fetch(`${API_URL}/image`, {
             method: 'put',
             headers: {'content-type': 'application/json'},
             body: JSON.stringify({
@@ -141,7 +142,7 @@ function App() {
           </div>
 
         </div>
-        : (Route === 'signin' ? <SignIn onRouteChange={onRouteChange} setCurrentUser={setCurrentUser}/> : <Register onRouteChange={onRouteChange} setCurrentUser={setCurrentUser}/>)
+        : (Route === 'signin' ? <SignIn onRouteChange={onRouteChange} setCurrentUser={setCurrentUser} API_URL={API_URL}/> : <Register onRouteChange={onRouteChange} setCurrentUser={setCurrentUser} API_URL={API_URL}/>)
       }
 
 

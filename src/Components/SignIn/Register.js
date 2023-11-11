@@ -1,7 +1,7 @@
 import './SignIn.css'
 import { useState } from 'react'
 
-const Register = ({ onRouteChange, setCurrentUser }) => {
+const Register = ({ onRouteChange, setCurrentUser, API_URL }) => {
 
     const [ registerDetails, setregisterDetails ] = useState({
         email: '',
@@ -31,7 +31,7 @@ const Register = ({ onRouteChange, setCurrentUser }) => {
     }
 
     const onSubmitClick = () => {
-        fetch('http://localhost:3001/register', {
+        fetch(`${API_URL}/register`, {
                 method: 'post',
                 headers: {'content-type': 'application/json'},
                 body: JSON.stringify({
