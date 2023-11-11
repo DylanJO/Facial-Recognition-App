@@ -13,4 +13,5 @@
 #inputimage {
     max-height: 500px;
     max-width: 500px;
+    box-shadow: 5px 8px 15px 0px #48106aa2;
 }

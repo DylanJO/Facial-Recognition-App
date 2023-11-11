@@ -7,27 +7,33 @@ import ParticlesBg from 'particles-bg';
 import FaceRecognition from '../Components/FaceRecognition/FaceRecognition';
 import SignIn from '../Components/SignIn/SignIn';
 import Register from '../Components/SignIn/Register';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function App() {
+  const effectRan = useRef(false);
   const [ input, setInput ] = useState('');
-  const [ imageURL, setImageURL ] = useState('https://images.pexels.com/photos/1727273/pexels-photo-1727273.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
-  const [ box, setBox ] = useState({
-    bottomRow: 0.64079297,
-    leftCol: 0.30250922,
-    rightCol: 0.75360423,
-    topRow: 0.2245356,
-  });
+  const initialState = {
+    box: {
+      bottomRow: 179,
+      leftCol: 100,
+      rightCol: 82,
+      topRow: 112,
+      },
+    imageURL: 'https://images.pexels.com/photos/1727273/pexels-photo-1727273.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    user: {
+      id: '',
+      name: '',
+      email: '',
+      password: '',
+      entries: 0,
+      joined: ''
+    }
+  };
+  const [ imageURL, setImageURL ] = useState(initialState.imageURL);
+  const [ box, setBox ] = useState(initialState.box);
   const [ Route, setRoute ] = useState('signin');
   const [ isSignedIn, setIsSignedIn ] = useState(false);
-  const [ currentUser, setCurrentUser ] = useState({
-    id: '',
-    name: '',
-    email: '',
-    password: '',
-    entries: 0,
-    joined: ''
-  });
+  const [ currentUser, setCurrentUser ] = useState(initialState.user);
 
 
 // homepage connect to server - not needed at the moment
@@ -39,6 +45,27 @@ function App() {
 
   const onInputChange = (event) => {
     setInput(event.target.value);
+  }
+
+
+  const onButtonSubmit = () => {
+    //console.log('click', box);
+    effectRan.current = true;
+    setImageURL(input);
+  }
+
+  const onRouteChange = (route) => {
+
+    if (route === 'home') {
+      setIsSignedIn(true);
+    }  else {
+      setImageURL(initialState.imageURL);
+      setBox(initialState.box);
+      setCurrentUser(initialState.user);
+      setIsSignedIn(false);
+    } 
+
+    setRoute(route);
   }
 
   const calculateFaceLocation = (data) => {
@@ -55,82 +82,43 @@ function App() {
     }
   }
 
-  const onButtonSubmit = () => {
-    //console.log('click', box);
-    setImageURL(input);
-  }
-
-  const onRouteChange = (route) => {
-    route === 'home' ? setIsSignedIn(true) : setIsSignedIn(false)
-    setRoute(route);
-  }
-
   // runs clarifai api to detect face whenever an image is submitted
   useEffect(() => {
-    // Your PAT (Personal Access Token) can be found in the portal under Authentification
-    const PAT = 'de4ae76a2a6b442389a96e1a219f2957';
-    // Specify the correct user_id/app_id pairings
-    // Since you're making inferences outside your app's scope
-    const USER_ID = '123987456123';       
-    const APP_ID = 'Face-Recognition-Finder';
-    // Change these to whatever model and image URL you want to use
-    const MODEL_ID = 'face-detection'; 
-    const IMAGE_URL = imageURL;
+    // strictMode work around
+    if (effectRan.current === true) {
 
-    const raw = JSON.stringify({
-        "user_app_id": {
-            "user_id": USER_ID,
-            "app_id": APP_ID
-        },
-        "inputs": [
-            {
-                "data": {
-                    "image": {
-                        "url": IMAGE_URL
-                    }
-                }
-            }
-        ]
-    });
-
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Key ' + PAT
-        },
-        body: raw
-    };
-    // NOTE: MODEL_VERSION_ID is optional, you can also call prediction with the MODEL_ID only
-    // https://api.clarifai.com/v2/models/{YOUR_MODEL_ID}/outputs
-    // this will default to the latest version_id
-
-    fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/outputs", requestOptions)
-        .then(response => response.text())
-        .then(output => JSON.parse(output))
-        .then(boundingBox => calculateFaceLocation(boundingBox))
-        .then(data => {
-          setBox(data);
-
-          if (data) {
-            fetch('http://localhost:3001/image', {
-                  method: 'put',
-                  headers: {'content-type': 'application/json'},
-                  body: JSON.stringify({
-                  id: currentUser.id
-                })
-              })
-              .then(response => response.json())
-              .then(count => {
-                setCurrentUser({
-                  ...currentUser,
-                  entries: count
-                })
-              })
-          }
-
+      fetch('http://localhost:3001/imageurl', {
+        method: 'post',
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify({
+          imageURL: imageURL,
         })
-        .catch(error => console.log(error))
+      })
+      .then(response => response.json())
+      .then(boundingBox => calculateFaceLocation(boundingBox))
+      .then(data => {
+        setBox(data);
+
+        if (data) {
+          fetch('http://localhost:3001/image', {
+            method: 'put',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({
+              id: currentUser.id
+            })
+          })
+          .then(response => response.json())
+          .then(count => {
+            setCurrentUser({
+              ...currentUser,
+              entries: count
+            })
+          })
+        }
+
+      })
+      .catch(error => console.log(error))
+    }
   },[imageURL]);
 
   return (

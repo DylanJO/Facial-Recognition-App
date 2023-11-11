@@ -4,10 +4,13 @@ const Rank = ({ name, entries }) => {
         
         <div>
             <div className="white f3">
-                {`${name}, your current rank is`}
+                {`${name}, you have detected`}
             </div>
             <div className="white f1">
                 {entries}
+            </div>
+            <div className="white f3">
+                {'faces'}
             </div>
         </div>
         
