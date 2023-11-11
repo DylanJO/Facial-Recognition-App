@@ -2,7 +2,7 @@ import './SignIn.css'
 import { useState } from 'react'
 
 const Register = ({ onRouteChange, setCurrentUser }) => {
-    const API_URL = process.env.API_URL;
+    const API_URL = process.env.REACT_APP_API_URL;
 
     const [ registerDetails, setregisterDetails ] = useState({
         email: '',

@@ -34,7 +34,7 @@ function App() {
   const [ Route, setRoute ] = useState('signin');
   const [ isSignedIn, setIsSignedIn ] = useState(false);
   const [ currentUser, setCurrentUser ] = useState(initialState.user);
-  const API_URL = process.env.API_URL;
+  const API_URL = process.env.REACT_APP_API_URL;
 
 
 // homepage connect to server - not needed at the moment
