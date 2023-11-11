@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 const SignIn = ({ onRouteChange, setCurrentUser, API_URL }) => {
 
+    console.log(API_URL)
+
     const [ signInDetails, setSignInDetails ] = useState({
         signInEmail: '',
         signInPassword: ''
