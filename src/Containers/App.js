@@ -142,7 +142,7 @@ function App() {
           </div>
 
         </div>
-        : (Route === 'signin' ? <SignIn onRouteChange={onRouteChange} setCurrentUser={setCurrentUser} API_URL={API_URL}/> : <Register onRouteChange={onRouteChange} setCurrentUser={setCurrentUser} API_URL={API_URL}/>)
+        : (Route === 'signin' ? <SignIn onRouteChange={onRouteChange} setCurrentUser={setCurrentUser} /> : <Register onRouteChange={onRouteChange} setCurrentUser={setCurrentUser} />)
       }
 
 

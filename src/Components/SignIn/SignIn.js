@@ -1,9 +1,10 @@
 import './SignIn.css'
 import { useState } from 'react';
 
-const SignIn = ({ onRouteChange, setCurrentUser, API_URL }) => {
+const SignIn = ({ onRouteChange, setCurrentUser }) => {
+    const API_URL = process.env.API_URL;
 
-    console.log(API_URL)
+    console.log(API_URL);
 
     const [ signInDetails, setSignInDetails ] = useState({
         signInEmail: '',
