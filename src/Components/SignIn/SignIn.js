@@ -4,8 +4,6 @@ import { useState } from 'react';
 const SignIn = ({ onRouteChange, setCurrentUser }) => {
     const API_URL = process.env.REACT_APP_API_URL;
 
-    console.log(process.env.REACT_APP_API_URL);
-
     const [ signInDetails, setSignInDetails ] = useState({
         signInEmail: '',
         signInPassword: ''

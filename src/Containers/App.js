@@ -74,7 +74,7 @@ function App() {
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
-    console.log("face location", clarifaiFace, width, height);
+    //console.log("face location", clarifaiFace, width, height);
     return {
       leftCol: clarifaiFace.left_col * width,
       rightCol: width - (clarifaiFace.right_col * width),
